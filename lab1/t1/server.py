@@ -33,6 +33,18 @@ while True:
     
     # Print the received data and the time it was received
     print(f"Received: {data} at {current_time}")
+    
+    # Simulate a 5-second delay
+    import time
+    time.sleep(5)
+    
+    # Check if all data was sent successfully (based on data size)
+    if len(data) == client_socket.send(data.encode('utf-8')):
+        print("Data sent successfully.")
+        break
+    else:
+        print("Error: Data transmission issue.")
+        break
 
 # Close the connection and the server socket
 client_socket.close()

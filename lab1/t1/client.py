@@ -20,5 +20,9 @@ while True:
     if sentence.lower() == 'exit':
         break
 
+    # Receive and print the echoed data from the server
+    echoed_data = client_socket.recv(1024).decode('utf-8')
+    print(f"Server echoed: {echoed_data}")
+
 # Close the client socket
 client_socket.close()
