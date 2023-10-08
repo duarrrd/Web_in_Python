@@ -34,6 +34,11 @@ while True:
     # Print the received data and the time it was received
     print(f"Received: {data} at {current_time}")
     
+    # Check if the client sent a specific shutdown message
+    if data.strip().lower() == 'shutdown':
+        print("Server is shutting down...")
+        break
+    
     # Simulate a 5-second delay
     import time
     time.sleep(5)
@@ -41,7 +46,6 @@ while True:
     # Check if all data was sent successfully (based on data size)
     if len(data) == client_socket.send(data.encode('utf-8')):
         print("Data sent successfully.")
-        break
     else:
         print("Error: Data transmission issue.")
         break
