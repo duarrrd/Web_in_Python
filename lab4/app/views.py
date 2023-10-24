@@ -1,7 +1,8 @@
-from flask import render_template, request, abort
+from flask import render_template, request, abort, session, redirect, url_for, flash
 from app import app
 from datetime import datetime
 import os
+import json
 
 my_skills = [
     "Python",
@@ -9,6 +10,11 @@ my_skills = [
     "CSS",
     "JS",
 ]
+
+user_session = {}
+
+script_dir = os.path.dirname(os.path.realpath(__file__))
+data_json_path = os.path.join(script_dir, 'data.json')
 
 @app.route('/')
 def main():
@@ -31,6 +37,31 @@ def skills(id=None):
     else:
         return render_template('skills.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    error_message = None
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        with open(data_json_path, 'r') as json_file:
+            auth_data = json.load(json_file)
+
+        if username == auth_data['username'] and password == auth_data['password']:
+            user_session['username'] = username
+
+            return redirect(url_for('info'))
+
+        error_message = "Authentication failed. Please check your username and password."
+
+    return render_template('login.html', error_message=error_message)
+
+@app.route('/info')
+def info():
+    # Check if the user is authenticated in the user_session dictionary
+    if 'username' in user_session:
+        return render_template('info.html')
+    else:
+        # Redirect to the login page if the user is not authenticated
+        return redirect(url_for('login'))
