@@ -12,31 +12,25 @@ my_skills = [
 
 @app.route('/')
 def main():
-    OS = os.environ['OS']
-    u_agent = request.user_agent
-    time = datetime.now().strftime("%H:%M")
-    return render_template('main.html', u_agent=u_agent, time=time, OS=OS)
+    return render_template('main.html')
 
 @app.route('/l_and_s')
 def l_and_s():
-    OS = os.environ['OS']
-    u_agent = request.user_agent
-    time = datetime.now().strftime("%H:%M")
-    return render_template('L&S.html', u_agent=u_agent, time=time, OS=OS)
+    return render_template('L&S.html')
 
 @app.route('/skills/<int:id>')
 @app.route('/skills')
 def skills(id=None):
-    OS = os.environ['OS']
-    u_agent = request.user_agent
-    time = datetime.now().strftime("%H:%M")
-
     if id is not None:
         if id > len(my_skills):
             abort(404)
         else:
             index = id - 1
             skill = my_skills[index]
-            return render_template('skill.html', skill=skill, id=id, u_agent=u_agent, time=time, OS=OS)
+            return render_template('skill.html')
     else:
-        return render_template('skills.html', my_skills=my_skills, u_agent=u_agent, time=time, OS=OS)
+        return render_template('skills.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
