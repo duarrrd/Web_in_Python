@@ -8,6 +8,9 @@
             <h1>INFO page</h1>
             {% if username %}
                 <p>Welcome, {{ username }}!</p>
+                <form method="POST" action="{{ url_for('logout') }}">
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
             {% else %}
                 <p>Please log in to access this page.</p>
             {% endif %}

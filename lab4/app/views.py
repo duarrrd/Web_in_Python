@@ -64,3 +64,10 @@ def info():
         return render_template('info.html', username=username)
     else:
         return redirect(url_for('login'))
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    if 'username' in user_session:
+        del user_session['username']
+
+    return redirect(url_for('login'))
