@@ -14,5 +14,16 @@
     {% block content %}
         <!-- Content from other pages -->
     {% endblock %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert alert-success">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
 </body>
 </html>
