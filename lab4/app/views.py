@@ -168,3 +168,27 @@ def logout():
         del user_session['username']
 
     return redirect(url_for('login'))
+
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    old_password = request.form.get('old_password')
+    new_password = request.form.get('new_password')
+
+    username = user_session['username']
+
+    with open(data_json_path, 'r') as json_file:
+        auth_data = json.load(json_file)
+
+    if username == auth_data['username'] and old_password == auth_data['password']:
+        auth_data['password'] = new_password
+
+        with open(data_json_path, 'w') as json_file:
+            json.dump(auth_data, json_file)
+
+        flash('Password changed successfully.', 'success')
+
+        return redirect(url_for('info'))
+    else:
+        flash('Invalid password.', 'error')
+
+        return redirect(url_for('info'))
