@@ -59,9 +59,8 @@ def login():
 
 @app.route('/info')
 def info():
-    # Check if the user is authenticated in the user_session dictionary
     if 'username' in user_session:
-        return render_template('info.html')
+        username = user_session['username']
+        return render_template('info.html', username=username)
     else:
-        # Redirect to the login page if the user is not authenticated
         return redirect(url_for('login'))

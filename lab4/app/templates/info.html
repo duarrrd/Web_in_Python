@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}INFO{% endblock %}
 {% block content %}
-    <h1>INFO page</h1>
+    <div class="container text-center">
+      <div class="row g-0">
+        <div class="col">
+          <div class="p-3">
+            <h1>INFO page</h1>
+            {% if username %}
+                <p>Welcome, {{ username }}!</p>
+            {% else %}
+                <p>Please log in to access this page.</p>
+            {% endif %}
+           </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
