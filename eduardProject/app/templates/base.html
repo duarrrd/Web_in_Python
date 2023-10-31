@@ -11,9 +11,6 @@
 </head>
 <body>
     {% include 'nav.html' %}
-    {% block content %}
-        <!-- Content from other pages -->
-    {% endblock %}
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -24,6 +21,10 @@
             </ul>
         {% endif %}
     {% endwith %}
+
+    {% block content %}
+        <!-- Content from other pages -->
+    {% endblock %}
 
 </body>
 </html>

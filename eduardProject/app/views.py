@@ -58,6 +58,11 @@ def login():
         if username == auth_data['username'] and password == auth_data['password']:
             user_session['username'] = username
 
+            if remember:
+                session.permanent = True
+
+            flash("Login successful.", "success")
+
             return redirect(url_for('info'))
 
         error_message = "Authentication failed. Please check your username and password."
@@ -112,6 +117,7 @@ def info():
 
         return render_template('info.html', username=username, cookies=cookies)
     else:
+        flash("You are not logged in. Please log in to access this page.", "error")
         return redirect(url_for('login'))
 
 @app.route('/add_cookie', methods=['POST'])
