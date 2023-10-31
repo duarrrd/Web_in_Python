@@ -6,16 +6,21 @@
         <div class="col">
           <div class="p-3">
             <form method="POST">
+                {{ form.csrf_token }}
               <fieldset>
                 <div class="form-group">
-                  <label for="username" class="form-label mt-4">Username</label>
-                  <input type="text" name="username" class="form-control" id="username" placeholder="Enter username">
+                    {{ form.name.label(class="form-label mt-4") }}
+                    {{ form.name(class="form-control") }}
                 </div>
                 <div class="form-group">
-                  <label for="password" class="form-label mt-4">Password</label>
-                  <input type="password" name="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
+                    {{ form.password.label(class="form-label mt-4") }}
+                    {{ form.password(class="form-control") }}
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                  <div class="form-group">
+                    {{ form.remember.label(class="form-check-label") }}
+                    {{ form.remember(class="form-check-input") }}
+                  </div>
+                  {{ form.submit(class="btn btn-primary") }}
               </fieldset>
             </form>
           </div>

@@ -3,6 +3,7 @@ from app import app
 from datetime import datetime
 import os
 import json
+from app.form import LoginForm
 
 my_skills = [
     "Python",
@@ -44,9 +45,12 @@ def skills(id=None):
 def login():
     error_message = None
 
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        username = form.name.data
+        password = form.password.data
+        remember = form.remember.data
 
         with open(data_json_path, 'r') as json_file:
             auth_data = json.load(json_file)
@@ -58,7 +62,7 @@ def login():
 
         error_message = "Authentication failed. Please check your username and password."
 
-    return render_template('login.html', error_message=error_message)
+    return render_template('login.html', error_message=error_message, form=form)
 
 @app.route('/info', methods=['GET', 'POST'])
 def info():
