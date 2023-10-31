@@ -1,0 +1,24 @@
+{% set menu = {
+  "Main": url_for('main'),
+  "Licenses & certifications": url_for('l_and_s'),
+  "Skills": url_for('skills'),
+  "Login": url_for('login')
+} %}
+
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">PORTFOLIO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav me-auto">
+          {% for name, url in menu.items() %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url }}">{{ name }}</a>
+            </li>
+          {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>

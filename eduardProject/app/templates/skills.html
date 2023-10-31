@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Skills{% endblock %}
+{% block content %}
+    <h1>List of Skills</h1>
+    <ul>
+        {% for skill in my_skills %}
+            <a href="{{ url_for('skills', id=loop.index) }}"><li>{{ skill }}</li></a>
+        {% endfor %}
+    </ul>
+    <p>Total Skills: {{ my_skills|length }}</p>
+{% endblock %}
