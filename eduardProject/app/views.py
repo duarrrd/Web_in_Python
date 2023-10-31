@@ -3,7 +3,7 @@ from app import app
 from datetime import datetime
 import os
 import json
-from app.form import LoginForm
+from app.form import LoginForm, ChangePasswordForm
 
 my_skills = [
     "Python",
@@ -58,8 +58,8 @@ def login():
         if username == auth_data['username'] and password == auth_data['password']:
             user_session['username'] = username
 
-            if remember:
-                session.permanent = True
+            if not remember:
+                return redirect(url_for('main'))
 
             flash("Login successful.", "success")
 
@@ -71,6 +71,7 @@ def login():
 
 @app.route('/info', methods=['GET', 'POST'])
 def info():
+    form = ChangePasswordForm()
     if 'username' in user_session:
         username = user_session['username']
 
@@ -115,7 +116,7 @@ def info():
 
             return response
 
-        return render_template('info.html', username=username, cookies=cookies)
+        return render_template('info.html', username=username, cookies=cookies, form=form)
     else:
         flash("You are not logged in. Please log in to access this page.", "error")
         return redirect(url_for('login'))
@@ -184,24 +185,26 @@ def logout():
 
 @app.route('/change_password', methods=['POST'])
 def change_password():
-    old_password = request.form.get('old_password')
-    new_password = request.form.get('new_password')
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
 
-    username = user_session['username']
+        username = user_session['username']
 
-    with open(data_json_path, 'r') as json_file:
-        auth_data = json.load(json_file)
+        with open(data_json_path, 'r') as json_file:
+            auth_data = json.load(json_file)
 
-    if username == auth_data['username'] and old_password == auth_data['password']:
-        auth_data['password'] = new_password
+        if username == auth_data['username'] and old_password == auth_data['password']:
+            auth_data['password'] = new_password
 
-        with open(data_json_path, 'w') as json_file:
-            json.dump(auth_data, json_file)
+            with open(data_json_path, 'w') as json_file:
+                json.dump(auth_data, json_file)
 
-        flash('Password changed successfully.', 'success')
+            flash('Password changed successfully.', 'success')
 
-        return redirect(url_for('info'))
-    else:
-        flash('Invalid password.', 'error')
+            return redirect(url_for('info'))
+        else:
+            flash('Invalid password.', 'error')
 
-        return redirect(url_for('info'))
+            return redirect(url_for('info'))

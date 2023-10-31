@@ -8,3 +8,10 @@ class LoginForm(FlaskForm):
                 Length(min=4, max=10, message="Повинно бути від 4 до 10 символів")])
     remember = BooleanField(label="Запам'ятати мене")
     submit = SubmitField(label="Ввійти")
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField(label='Old password', validators=[DataRequired("Це поле обов'язкове"),
+            Length(min=4, max=10, message="Повинно бути від 4 до 10 символів")])
+    new_password = PasswordField(label='New password', validators=[DataRequired("Це поле обов'язкове"),
+            Length(min=4, max=10, message="Повинно бути від 4 до 10 символів")])
+    submit = SubmitField(label="Зберегти")
