@@ -1,9 +1,10 @@
 from flask import render_template, request, session, redirect, url_for, flash, make_response
-from app import app
+from app import app, db
 from datetime import datetime
 import os
 import json
-from app.form import LoginForm, ChangePasswordForm
+from app.form import LoginForm, ChangePasswordForm, FeedbackForm
+from app.models import Feedback
 
 my_skills = [
     "Python",
@@ -208,3 +209,24 @@ def change_password():
             flash('Invalid password.', 'error')
 
             return redirect(url_for('info'))
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        comment = form.comment.data
+
+        feedback = Feedback(name=name, comment=comment)
+
+        try:
+            db.session.add(feedback)
+            db.session.commit()
+            flash('Feedback submitted successfully', 'success')
+        except:
+            flash('An error occurred while submitting feedback', 'error')
+
+        return redirect(url_for('feedback'))
+
+    feedback_data = Feedback.query.all()
+    return render_template('feedback.html', form=form, feedback_data=feedback_data)
