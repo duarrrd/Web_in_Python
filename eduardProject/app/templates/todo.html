@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Todo List{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Todo List</h1>
+        <form method="POST" action="{{ url_for('todo') }}" class="mb-4 justify-content-center">
+            {{ form.hidden_tag() }}
+            <div class="input-group">
+                {{ form.task.label(class="input-group-text") }}
+                {{ form.task(class="form-control") }}
+            </div>
+            <div class="mt-2">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        <table class="table table-danger table-responsive-md mx-auto">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" class="text-center">Завдання</th>
+                    <th scope="col" class="text-center">Статус</th>
+                    <th scope="col" class="text-center">Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for todo in todos %}
+                    <tr class="text-center">
+                        <th scope="row">{{ todo.id }}</th>
+                        <td class="shadow">{{ todo.task }}</td>
+                        <td class="{{ 'bg-success' if todo.status else 'bg-primary' }}">
+                            {{ 'Завершено' if todo.status else 'В-процесі' }}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('update_todo', id=todo.id) }}" class="btn btn-info btn-sm">Оновити</a>
+                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="btn btn-primary btn-sm">Видалити</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
