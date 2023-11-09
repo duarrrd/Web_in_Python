@@ -20,3 +20,7 @@ class FeedbackForm(FlaskForm):
     name = StringField('Ім’я', validators=[DataRequired()])
     comment = TextAreaField('Коментар', validators=[DataRequired()])
     submit = SubmitField('Надіслати відгук')
+
+class TodoForm(FlaskForm):
+    task = StringField('Завдання', validators=[DataRequired()])
+    submit = SubmitField('Додати')
