@@ -3,8 +3,8 @@ from app import app, db
 from datetime import datetime
 import os
 import json
-from app.form import LoginForm, ChangePasswordForm, FeedbackForm
-from app.models import Feedback
+from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm
+from app.models import Feedback, Todo
 
 my_skills = [
     "Python",
@@ -230,3 +230,34 @@ def feedback():
 
     feedback_data = Feedback.query.all()
     return render_template('feedback.html', form=form, feedback_data=feedback_data)
+
+@app.route('/todo', methods=['GET', 'POST'])
+def todo():
+    form = TodoForm()
+
+    if form.validate_on_submit():
+        task = form.task.data
+        new_todo = Todo(task=task)
+        db.session.add(new_todo)
+        db.session.commit()
+        flash('Task added successfully!', 'success')
+        return redirect(url_for('todo'))
+
+    todos = Todo.query.all()
+    return render_template('todo.html', form=form, todos=todos)
+
+@app.route('/todo/update/<int:id>')
+def update_todo(id):
+    todo = Todo.query.get_or_404(id)
+    todo.status = not todo.status  # Toggle status
+    db.session.commit()
+    flash('Task updated successfully!', 'success')
+    return redirect(url_for('todo'))
+
+@app.route('/todo/delete/<int:id>')
+def delete_todo(id):
+    todo = Todo.query.get_or_404(id)
+    db.session.delete(todo)
+    db.session.commit()
+    flash('Task deleted successfully!', 'success')
+    return redirect(url_for('todo'))
