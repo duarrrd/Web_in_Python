@@ -16,7 +16,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(label='Password', validators=[DataRequired("Це поле обов'язкове"),
             Length(min=7, message="Mінімум 7 символів")
         ])
-    confirm_password = PasswordField(label='Password', validators=[DataRequired("Це поле обов'язкове")])
+    confirm_password = PasswordField(label='Repeat Password', validators=[DataRequired("Це поле обов'язкове")])
     submit = SubmitField(label="Зареєструватись")
 
 class ChangePasswordForm(FlaskForm):
