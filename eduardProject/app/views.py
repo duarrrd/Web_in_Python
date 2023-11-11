@@ -3,7 +3,7 @@ from app import app, db
 from datetime import datetime
 import os
 import json
-from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm
+from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm
 from app.models import Feedback, Todo
 
 my_skills = [
@@ -49,15 +49,15 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        username = form.name.data
+        email = form.email.data
         password = form.password.data
         remember = form.remember.data
 
         with open(data_json_path, 'r') as json_file:
             auth_data = json.load(json_file)
 
-        if username == auth_data['username'] and password == auth_data['password']:
-            user_session['username'] = username
+        if email == auth_data['username'] and password == auth_data['password']:
+            user_session['username'] = email
 
             if not remember:
                 return redirect(url_for('main'))
@@ -69,6 +69,14 @@ def login():
         error_message = "Authentication failed. Please check your username and password."
 
     return render_template('login.html', error_message=error_message, form=form)
+
+@app.route("/registration", methods=['GET', 'POST'])
+def registration():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash("Account created for {form.username.data} !", "success")
+        return redirect(url_for('login'))
+    return render_template("registration.html", form=form)
 
 @app.route('/info', methods=['GET', 'POST'])
 def info():
