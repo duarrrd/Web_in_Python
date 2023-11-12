@@ -1,4 +1,5 @@
 from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,5 +18,13 @@ class User(db.Model):
     image_file = db.Column(db.String(20),  nullable=False, default="generic.jpg")
     password = db.Column(db.String(60), nullable=False)
 
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = generate_password_hash(password)
+
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+        return f"{self.id} -- {self.username} -- {self.email}"
+
+    def checkPassword(self, pwd):
+        return check_password_hash(self.password, pwd)

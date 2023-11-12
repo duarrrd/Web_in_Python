@@ -50,7 +50,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
-        if user and user.password == form.password.data:
+        if user and user.verify_password(form.password.data):
             if form.remember.data:
                 session["email"] = form.email.data  # Ensure the 'email' key is being set
                 flash("Login successful", category="success")
@@ -203,7 +203,7 @@ def change_password():
     if form.validate_on_submit():
         user = User.query.filter_by(email=session.get("email")).first()
 
-        if user and user.password == form.old_password.data:
+        if user and user.verify_password(form.old_password.data):
             try:
                 user.password = form.new_password.data
                 db.session.commit()
