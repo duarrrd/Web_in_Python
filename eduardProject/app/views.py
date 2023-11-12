@@ -197,25 +197,28 @@ def logout():
     return redirect(url_for("login"))
 
 @app.route('/change_password', methods=['POST'])
+@login_required
 def change_password():
     form = ChangePasswordForm()
+
     if form.validate_on_submit():
         user = current_user
 
-        if user and user.verify_password(form.old_password.data):
+        if user and user.checkPassword(form.old_password.data):
             try:
-                user.password = form.new_password.data
+                # Update the password
+                user.set_password(form.new_password.data)
                 db.session.commit()
                 flash("Password changed", category="success")
-            except:
+            except Exception as e:
                 db.session.rollback()
-                flash("Error", category="danger")
+                flash(f"Error: {e}", category="danger")
         else:
-            flash("Error", category="danger")
+            flash("Invalid password", category="danger")
     else:
-        flash("Error", category="danger")
+        flash("Form validation failed", category="danger")
 
-    return redirect(url_for('info'))
+    return redirect(url_for('account'))
 
 @app.route('/feedback', methods=['GET', 'POST'])
 def feedback():
@@ -286,11 +289,12 @@ if not os.path.exists(UPLOAD_FOLDER):
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    form = UpdateAccountForm(obj=current_user)
+    update_account_form = UpdateAccountForm(obj=current_user)
+    change_password_form = ChangePasswordForm()
 
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.email = form.email.data
+    if update_account_form.validate_on_submit():
+        current_user.username = update_account_form.username.data
+        current_user.email = update_account_form.email.data
 
         if 'image' in request.files:
             file = request.files['image']
@@ -308,4 +312,24 @@ def account():
         flash('Account updated successfully!', 'success')
         return redirect(url_for('account'))
 
-    return render_template('account.html', form=form, is_authenticated=True)
+    if change_password_form.validate_on_submit():
+        if current_user.check_password(change_password_form.old_password.data):
+            try:
+                current_user.set_password(change_password_form.new_password.data)
+                db.session.commit()
+                flash('Password changed successfully!', 'success')
+                return redirect(url_for('account'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error changing password: {e}", 'danger')
+        else:
+            flash('Current password is incorrect', 'danger')
+
+
+    return render_template('account.html', update_account_form=update_account_form, change_password_form=change_password_form, is_authenticated=True)
+
+
+
+
+
+
