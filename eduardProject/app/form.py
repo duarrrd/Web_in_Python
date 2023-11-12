@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, ValidationError
+from wtforms.validators import DataRequired, Length, Email, ValidationError, Regexp
 from app.models import User
 
 class LoginForm(FlaskForm):
@@ -10,9 +10,12 @@ class LoginForm(FlaskForm):
     submit = SubmitField(label="Ввійти")
 
 class RegistrationForm(FlaskForm):
-    username = StringField(label='User name', validators=[DataRequired("Це поле обов'язкове"),
-            Length(min=4, max=14, message="Від 4 до 14")
-        ])
+    username = StringField("Username", validators=[DataRequired("Це поле обов'язкове"),
+                                                   Length(min=4, max=10),
+                                                   Regexp('^[A-Za-z][a-zA-Z0-9._]+$', 0,
+                                                          "username must have only "
+                                                          "letters, numbers, dots or "
+                                                          "underscores")])
     email = StringField(label='Email', validators=[DataRequired("Це поле обов'язкове"), Email()])
     password = PasswordField(label='Password', validators=[DataRequired("Це поле обов'язкове"),
             Length(min=7, message="Mінімум 7 символів")
