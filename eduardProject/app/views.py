@@ -5,6 +5,7 @@ import os
 import json
 from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm
 from app.models import Feedback, Todo, User
+from flask_login import login_user, current_user, logout_user
 
 my_skills = [
     "Python",
@@ -44,49 +45,48 @@ def skills(id=None):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error_message = None
+    if current_user.is_authenticated:
+        return redirect(url_for('info'))
+
     form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
-        if user and user.verify_password(form.password.data):
-            if form.remember.data:
-                session["email"] = form.email.data  # Ensure the 'email' key is being set
-                flash("Login successful", category="success")
-                return redirect(url_for("info"))
-
+        if user and user.checkPassword(form.password.data):
+            login_user(user, remember=form.remember.data)
             flash("Login successful", category="success")
             return redirect(url_for("info"))
 
-        flash("ERROR!!!", category="danger")
+        flash("Invalid email or password", category="danger")
         return redirect(url_for("login"))
 
-    return render_template('login.html', error_message=error_message, form=form)
-
-
+    return render_template('login.html', form=form)
 
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
+    if current_user.is_authenticated:
+        return redirect(url_for('info'))
+
     form = RegistrationForm()
     if form.validate_on_submit():
         new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
         try:
             db.session.add(new_user)
             db.session.commit()
-            flash(f"Account created for {form.username.data}!", "success")
+            flash(f"Account created for {new_user.username}!", "success")
+            return redirect(url_for("login"))
         except:
             db.session.rollback()
             flash("ERROR, try use another data", category="danger")
             return redirect(url_for("registration"))
 
-        return redirect(url_for('login'))
     return render_template("register.html", form=form)
 
 @app.route('/info', methods=['GET', 'POST'])
 def info():
     form = ChangePasswordForm()
-    if 'email' in session:
+    if current_user.is_authenticated:
         email = session['email']
 
         cookies = []
@@ -130,7 +130,7 @@ def info():
 
             return response
 
-        return render_template('info.html', email=email, cookies=cookies, form=form)
+        return render_template('info.html', email=current_user.email, cookies=cookies, form=form)
     else:
         flash("You are not logged in. Please log in to access this page.", "error")
         return redirect(url_for('login'))
@@ -192,16 +192,15 @@ def delete_all_cookies():
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    if 'username' in user_session:
-        del user_session['username']
-
-    return redirect(url_for('login'))
+    logout_user()
+    flash("Ви вийшли з аккаунта", category="success")
+    return redirect(url_for("login"))
 
 @app.route('/change_password', methods=['POST'])
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=session.get("email")).first()
+        user = current_user
 
         if user and user.verify_password(form.old_password.data):
             try:
