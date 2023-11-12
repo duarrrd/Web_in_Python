@@ -3,7 +3,7 @@ from app import app, db
 from datetime import datetime
 import os
 import json
-from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm
+from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm, UpdateAccountForm
 from app.models import Feedback, Todo, User
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -271,8 +271,16 @@ def delete_todo(id):
 def users():
     return render_template('users.html', users=User.query.all())
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    form = ChangePasswordForm()
-    return render_template('account.html',form=form, user=current_user, is_authenticated=True)
+    form = UpdateAccountForm(obj=current_user)
+
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Account updated successfully!', 'success')
+        return redirect(url_for('account'))
+
+    return render_template('account.html', form=form, is_authenticated=True)

@@ -47,3 +47,23 @@ class FeedbackForm(FlaskForm):
 class TodoForm(FlaskForm):
     task = StringField('Завдання', validators=[DataRequired()])
     submit = SubmitField('Додати')
+
+class UpdateAccountForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired("This field is required"),
+                                                   Length(min=4, max=10),
+                                                   Regexp('^[A-Za-z][a-zA-Z0-9._]+$', 0,
+                                                          "Username must have only "
+                                                          "letters, numbers, dots, or "
+                                                          "underscores")])
+
+    email = StringField(label='Email', validators=[DataRequired("This field is required"), Email()])
+
+    submit = SubmitField(label="Update")
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('Email already registered')
+
+    def validate_username(self, field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError("Username already in use")
