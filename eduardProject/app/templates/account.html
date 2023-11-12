@@ -6,19 +6,22 @@
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="p-3">
-                    <img src="{{ url_for('static', filename='imgs/' + current_user.image_file) }}" alt="Profile Photo" class="rounded-circle mb-3">
+                    <img src="{{ url_for('static', filename='imgs/' + current_user.image_file) }}" alt="Profile Photo" class="mb-3 rounded-circle" style="width: 100%;">
                     <h1>{{ current_user.username }}</h1>
                     <p>Email: {{ current_user.email }}</p>
                 </div>
                 <div class="p-3">
                     <h2>Update Account Information</h2>
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         <div class="mb-3">
                             {{ render_field(form.username, 'Enter Username') }}
                         </div>
                         <div class="mb-3">
                             {{ render_field(form.email, 'Enter Email') }}
+                        </div>
+                         <div class="mb-3">
+                            {{ render_field(form.image, 'Upload Image') }}
                         </div>
                         <div>
                             {{ render_field(form.submit, 'Update', class="btn btn-primary") }}

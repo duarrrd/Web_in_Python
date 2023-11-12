@@ -3,9 +3,11 @@ from app import app, db
 from datetime import datetime
 import os
 import json
+from werkzeug.utils import secure_filename
 from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm, UpdateAccountForm
 from app.models import Feedback, Todo, User
 from flask_login import login_user, current_user, logout_user, login_required
+import shutil
 
 my_skills = ["Python","HTML","CSS","JS",]
 
@@ -271,6 +273,16 @@ def delete_todo(id):
 def users():
     return render_template('users.html', users=User.query.all())
 
+
+# pic path #
+UPLOAD_FOLDER = 'static/imgs/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+# end #
+
+
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
@@ -279,6 +291,19 @@ def account():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
+
+        if 'image' in request.files:
+            file = request.files['image']
+            if file.filename != '':
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+                current_user.image_file = filename
+
+                # Move the file to the UPLOAD_FOLDER
+                destination = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename)
+                shutil.move(file_path, destination)
+
         db.session.commit()
         flash('Account updated successfully!', 'success')
         return redirect(url_for('account'))

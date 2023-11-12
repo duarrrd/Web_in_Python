@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, ValidationError, Regexp
+from wtforms.validators import DataRequired, Length, Email, ValidationError, Regexp, InputRequired
 from app.models import User
+from flask_wtf.file import FileField, FileAllowed
 
 class LoginForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired("Це поле обов'язкове"), Email()])
@@ -57,6 +58,8 @@ class UpdateAccountForm(FlaskForm):
                                                           "underscores")])
 
     email = StringField(label='Email', validators=[DataRequired("This field is required"), Email()])
+
+    image = FileField('Profile Image', validators=[InputRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')])
 
     submit = SubmitField(label="Update")
 
