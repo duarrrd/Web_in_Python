@@ -4,7 +4,8 @@
   "Skills": url_for('skills'),
   "Feedback": url_for('feedback'),
   "ToDo": url_for('todo'),
-  "Users": url_for('users')
+  "Users": url_for('users'),
+  "Info": url_for('info')
 } %}
 
 <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -23,7 +24,7 @@
       <ul class="navbar-nav">
           {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{{url_for('info')}}">Info</a>
+              <a class="nav-link" href="{{url_for('account')}}">Account</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{url_for('logout')}}">Logout</a>

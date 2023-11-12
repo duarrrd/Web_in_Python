@@ -269,3 +269,8 @@ def delete_todo(id):
 @app.route('/users')
 def users():
     return render_template('users.html', users=User.query.all())
+
+@app.route('/account')
+def account():
+    form = ChangePasswordForm()
+    return render_template('account.html',form=form, user=current_user, is_authenticated=True)
