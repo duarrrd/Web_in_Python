@@ -7,12 +7,7 @@ from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, Regi
 from app.models import Feedback, Todo, User
 from flask_login import login_user, current_user, logout_user
 
-my_skills = [
-    "Python",
-    "HTML",
-    "CSS",
-    "JS",
-]
+my_skills = ["Python","HTML","CSS","JS",]
 
 user_session = {}
 
