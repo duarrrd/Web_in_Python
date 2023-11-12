@@ -7,8 +7,8 @@
         <div class="col">
           <div class="p-3">
             <h1>INFO page</h1>
-            {% if username %}
-                <p>Welcome, {{ username }}!</p>
+            {% if email %}
+                <p>Welcome, {{ email }}!</p>
                 <form method="POST" action="{{ url_for('logout') }}">
                     <button type="submit" class="btn btn-danger">Logout</button>
                 </form>

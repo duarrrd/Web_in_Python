@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 import json
 from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm
-from app.models import Feedback, Todo
+from app.models import Feedback, Todo, User
 
 my_skills = [
     "Python",
@@ -45,44 +45,49 @@ def skills(id=None):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error_message = None
-
     form = LoginForm()
 
     if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-        remember = form.remember.data
+        user = User.query.filter_by(email=form.email.data).first()
 
-        with open(data_json_path, 'r') as json_file:
-            auth_data = json.load(json_file)
+        if user and user.password == form.password.data:
+            if form.remember.data:
+                session["email"] = form.email.data  # Ensure the 'email' key is being set
+                flash("Login successful", category="success")
+                return redirect(url_for("info"))
 
-        if email == auth_data['username'] and password == auth_data['password']:
-            user_session['username'] = email
+            flash("Login successful", category="success")
+            return redirect(url_for("info"))
 
-            if not remember:
-                return redirect(url_for('main'))
-
-            flash("Login successful.", "success")
-
-            return redirect(url_for('info'))
-
-        error_message = "Authentication failed. Please check your username and password."
+        flash("ERROR!!!", category="danger")
+        return redirect(url_for("login"))
 
     return render_template('login.html', error_message=error_message, form=form)
+
+
 
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash("Account created for {form.username.data} !", "success")
+        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash(f"Account created for {form.username.data}!", "success")
+        except:
+            db.session.rollback()
+            flash("ERROR, try use another data", category="danger")
+            return redirect(url_for("registration"))
+
         return redirect(url_for('login'))
     return render_template("register.html", form=form)
 
 @app.route('/info', methods=['GET', 'POST'])
 def info():
     form = ChangePasswordForm()
-    if 'username' in user_session:
-        username = user_session['username']
+    if 'email' in session:
+        email = session['email']
 
         cookies = []
         for key, value in request.cookies.items():
@@ -125,7 +130,7 @@ def info():
 
             return response
 
-        return render_template('info.html', username=username, cookies=cookies, form=form)
+        return render_template('info.html', email=email, cookies=cookies, form=form)
     else:
         flash("You are not logged in. Please log in to access this page.", "error")
         return redirect(url_for('login'))
@@ -196,27 +201,22 @@ def logout():
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
-        old_password = request.form.get('old_password')
-        new_password = request.form.get('new_password')
+        user = User.query.filter_by(email=session.get("email")).first()
 
-        username = user_session['username']
-
-        with open(data_json_path, 'r') as json_file:
-            auth_data = json.load(json_file)
-
-        if username == auth_data['username'] and old_password == auth_data['password']:
-            auth_data['password'] = new_password
-
-            with open(data_json_path, 'w') as json_file:
-                json.dump(auth_data, json_file)
-
-            flash('Password changed successfully.', 'success')
-
-            return redirect(url_for('info'))
+        if user and user.password == form.old_password.data:
+            try:
+                user.password = form.new_password.data
+                db.session.commit()
+                flash("Password changed", category="success")
+            except:
+                db.session.rollback()
+                flash("Error", category="danger")
         else:
-            flash('Invalid password.', 'error')
+            flash("Error", category="danger")
+    else:
+        flash("Error", category="danger")
 
-            return redirect(url_for('info'))
+    return redirect(url_for('info'))
 
 @app.route('/feedback', methods=['GET', 'POST'])
 def feedback():
