@@ -12,16 +12,23 @@
                 </div>
                 <div class="p-3">
                     <h2>Update Account Information</h2>
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" class="update-form">
                         {{ update_account_form.hidden_tag() }}
                         <div class="mb-3">
-                            {{ render_field(update_account_form.username, 'Enter Username') }}
+                            {{ render_field(update_account_form.username, 'Enter Username', class="form-control") }}
                         </div>
                         <div class="mb-3">
-                            {{ render_field(update_account_form.email, 'Enter Email') }}
+                            {{ render_field(update_account_form.email, 'Enter Email', class="form-control") }}
                         </div>
                         <div class="mb-3">
-                            {{ render_field(update_account_form.image, 'Upload Image') }}
+                            <p class="about-me-label">About me</p>
+                            {{ render_field(update_account_form.about_me, 'About me', class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ render_field(update_account_form.image, 'Upload Image', class="form-control") }}
+                        </div>
+                        <div class="p-3">
+                            <p class="last-seen">Last Seen: {{ current_user.last_seen }}</p>
                         </div>
                         <div>
                             {{ render_field(update_account_form.submit, 'Update', class="btn btn-primary") }}

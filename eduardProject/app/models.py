@@ -1,6 +1,7 @@
 from app import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from datetime import datetime
 
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,6 +22,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20),  nullable=False, default="generic.jpg")
     password = db.Column(db.String(60), nullable=False)
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, username, email, password):
         self.username = username
