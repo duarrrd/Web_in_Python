@@ -269,3 +269,7 @@ def delete_todo(id):
     db.session.commit()
     flash('Task deleted successfully!', 'success')
     return redirect(url_for('todo'))
+
+@app.route('/users')
+def users():
+    return render_template('users.html', users=User.query.all())
