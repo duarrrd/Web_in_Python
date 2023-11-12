@@ -2,8 +2,6 @@
   "Main": url_for('main'),
   "Licenses & certifications": url_for('l_and_s'),
   "Skills": url_for('skills'),
-  "Login": url_for('login'),
-  "Registration": url_for('registration'),
   "Feedback": url_for('feedback'),
   "ToDo": url_for('todo'),
   "Users": url_for('users')
@@ -22,6 +20,23 @@
               <a class="nav-link" href="{{ url }}">{{ name }}</a>
             </li>
           {% endfor %}
+      <ul class="navbar-nav">
+          {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('info')}}">Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('registration')}}">Registration</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('login')}}">Login</a>
+            </li>
+          {% endif %}
+        </ul>
       </ul>
     </div>
   </div>

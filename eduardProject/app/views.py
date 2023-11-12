@@ -190,10 +190,12 @@ def delete_all_cookies():
         return redirect(url_for('login'))
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    logout_user()
-    flash("Ви вийшли з аккаунта", category="success")
+    if request.method == 'POST' or request.method == 'GET':
+        logout_user()
+        flash("You've been logged out", category="success")
+        return redirect(url_for("login"))
     return redirect(url_for("login"))
 
 @app.route('/change_password', methods=['POST'])
