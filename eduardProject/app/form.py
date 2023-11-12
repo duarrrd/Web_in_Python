@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired, Length, Email, ValidationError
+from app.models import User
 
 class LoginForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired("Це поле обов'язкове"), Email()])
@@ -18,6 +19,15 @@ class RegistrationForm(FlaskForm):
         ])
     confirm_password = PasswordField(label='Repeat Password', validators=[DataRequired("Це поле обов'язкове")])
     submit = SubmitField(label="Зареєструватись")
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('Email already registered')
+
+    def validate_username(self, field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError("Username already in use")
+
 
 class ChangePasswordForm(FlaskForm):
     old_password = PasswordField(label='Old password', validators=[DataRequired("Це поле обов'язкове"),
