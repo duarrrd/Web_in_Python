@@ -1,9 +1,8 @@
-# Migration
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/db565d3d-b585-41ce-902b-07a01e3922c6)
+# Nav if Unauthorised
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/6f94dbad-2d68-4e20-acd1-c5b2f5a79561)
 
-# Initial data befor
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/bf184b79-9a2c-4f6d-a0c5-4c1fb8541dcb)
+# Nav if Authorised
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/9aff8521-e10d-4725-89cd-95b48e49cf32)
 
-# After
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/39867335-d6e0-4c65-b50d-4d694be54fc0)
-
+# Account page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/0ead4511-ef4c-4d04-b44f-aeea486ce010)
