@@ -5,7 +5,7 @@ import os
 import json
 from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm
 from app.models import Feedback, Todo, User
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 my_skills = ["Python","HTML","CSS","JS",]
 
@@ -79,6 +79,7 @@ def registration():
     return render_template("register.html", form=form)
 
 @app.route('/info', methods=['GET', 'POST'])
+@login_required
 def info():
     form = ChangePasswordForm()
     if current_user.is_authenticated:
@@ -271,6 +272,7 @@ def users():
     return render_template('users.html', users=User.query.all())
 
 @app.route('/account')
+@login_required
 def account():
     form = ChangePasswordForm()
     return render_template('account.html',form=form, user=current_user, is_authenticated=True)
