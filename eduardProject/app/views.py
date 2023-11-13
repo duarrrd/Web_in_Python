@@ -300,6 +300,7 @@ def account():
     if update_account_form.validate_on_submit():
         current_user.username = update_account_form.username.data
         current_user.email = update_account_form.email.data
+        current_user.about_me = update_account_form.about_me.data
 
         if 'image' in request.files:
             file = request.files['image']
