@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% from "render_field.html" import render_field %}
+{% block title %}Update Account{% endblock %}
+{% block content %}
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="p-3">
+                    <img src="{{ url_for('static', filename='imgs/' + current_user.image_file) }}" alt="Profile Photo" class="mb-3 rounded-circle" style="width: 50%; height: 50%; object-fit: cover;">
+                    <h1>{{ current_user.username }}</h1>
+                    <p>Email: {{ current_user.email }}</p>
+                </div>
+                <div class="p-3">
+                    <h2>Update Account Information</h2>
+                    <form method="POST" enctype="multipart/form-data" class="update-form">
+                        {{ update_account_form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ render_field(update_account_form.username, 'Enter Username', class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ render_field(update_account_form.email, 'Enter Email', class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <p class="about-me-label">About me</p>
+                            {{ render_field(update_account_form.about_me, 'About me', class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ render_field(update_account_form.image, 'Upload Image', class="form-control") }}
+                        </div>
+                        <div class="p-3">
+                            <p class="last-seen">Last Seen: {{ current_user.last_seen }}</p>
+                        </div>
+                        <div>
+                            {{ render_field(update_account_form.submit, 'Update', class="btn btn-primary") }}
+                        </div>
+                    </form>
+                    <br><br><hr>
+                    <h2>Change Password</h2>
+                    <form method="POST" action="{{ url_for('change_password') }}">
+                        {{ change_password_form.csrf_token }}
+                        <div class="form-group">
+                            {{ render_field(change_password_form.old_password, 'Current Password', class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ render_field(change_password_form.new_password, 'New Password', class="form-control") }}
+                        </div>
+                        {{ render_field(change_password_form.submit, 'Change Password', class="btn btn-success") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

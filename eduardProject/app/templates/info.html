@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from "render_field.html" import render_field %}
 {% block title %}INFO{% endblock %}
 {% block content %}
     <div class="container text-center">
@@ -6,8 +7,8 @@
         <div class="col">
           <div class="p-3">
             <h1>INFO page</h1>
-            {% if username %}
-                <p>Welcome, {{ username }}!</p>
+            {% if email %}
+                <p>Welcome, {{ email }}!</p>
                 <form method="POST" action="{{ url_for('logout') }}">
                     <button type="submit" class="btn btn-danger">Logout</button>
                 </form>
@@ -68,15 +69,14 @@
           <br><br><hr>
                 <h2>Change Password</h2>
                 <form method="POST" action="{{ url_for('change_password') }}">
+                    {{ form.csrf_token }}
                   <div class="form-group">
-                    <label for="old_password">Old Password:</label>
-                    <input type="password" name="old_password" class="form-control" id="old_password" required>
+                    {{ render_field(form.old_password, class="form-control") }}
                   </div>
                   <div class="form-group">
-                    <label for="new_password">New Password:</label>
-                    <input type="password" name="new_password" class="form-control" id="new_password" required>
+                    {{ render_field(form.new_password, class="form-control") }}
                   </div>
-                  <button type="submit" class="btn btn-success">Change Password</button>
+                  {{ render_field(form.submit, class="btn btn-success") }}
                 </form>
            </div>
         </div>

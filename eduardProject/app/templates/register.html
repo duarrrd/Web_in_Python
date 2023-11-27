@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% from "render_field.html" import render_field %}
-{% block title %}Login{% endblock %}
+{% block title %}registration{% endblock %}
 {% block content %}
     <div class="container text-center">
       <div class="row g-0">
@@ -10,14 +10,17 @@
                 {{ form.csrf_token }}
               <fieldset>
                 <div class="form-group">
+                    {{ render_field(form.username, class="form-control") }}
+                </div>
+                <div class="form-group">
                     {{ render_field(form.email, class="form-control") }}
                 </div>
                 <div class="form-group">
                     {{ render_field(form.password, class="form-control") }}
                 </div>
-                  <div class="form-group">
-                    {{ render_field(form.remember, class="form-check-input") }}
-                  </div>
+                <div class="form-group">
+                    {{ render_field(form.confirm_password, class="form-control") }}
+                </div>
                   {{ render_field(form.submit, class="btn btn-primary") }}
               </fieldset>
             </form>

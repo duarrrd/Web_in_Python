@@ -1,15 +1,15 @@
 from flask import render_template, request, session, redirect, url_for, flash, make_response
-from app import app
+from app import app, db
 from datetime import datetime
 import os
 import json
+from werkzeug.utils import secure_filename
+from app.form import LoginForm, ChangePasswordForm, FeedbackForm, TodoForm, RegistrationForm, UpdateAccountForm
+from app.models import Feedback, Todo, User
+from flask_login import login_user, current_user, logout_user, login_required
+import shutil
 
-my_skills = [
-    "Python",
-    "HTML",
-    "CSS",
-    "JS",
-]
+my_skills = ["Python","HTML","CSS","JS",]
 
 user_session = {}
 
@@ -42,28 +42,50 @@ def skills(id=None):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error_message = None
+    if current_user.is_authenticated:
+        return redirect(url_for('info'))
 
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    form = LoginForm()
 
-        with open(data_json_path, 'r') as json_file:
-            auth_data = json.load(json_file)
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
 
-        if username == auth_data['username'] and password == auth_data['password']:
-            user_session['username'] = username
+        if user and user.checkPassword(form.password.data):
+            login_user(user, remember=form.remember.data)
+            flash("Login successful", category="success")
+            return redirect(url_for("info"))
 
-            return redirect(url_for('info'))
+        flash("Invalid email or password", category="danger")
+        return redirect(url_for("login"))
 
-        error_message = "Authentication failed. Please check your username and password."
+    return render_template('login.html', form=form)
 
-    return render_template('login.html', error_message=error_message)
+@app.route("/registration", methods=['GET', 'POST'])
+def registration():
+    if current_user.is_authenticated:
+        return redirect(url_for('info'))
+
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash(f"Account created for {new_user.username}!", "success")
+            return redirect(url_for("login"))
+        except:
+            db.session.rollback()
+            flash("ERROR, try use another data", category="danger")
+            return redirect(url_for("registration"))
+
+    return render_template("register.html", form=form)
 
 @app.route('/info', methods=['GET', 'POST'])
+@login_required
 def info():
-    if 'username' in user_session:
-        username = user_session['username']
+    form = ChangePasswordForm()
+    if current_user.is_authenticated:
+        email = session['email']
 
         cookies = []
         for key, value in request.cookies.items():
@@ -106,8 +128,9 @@ def info():
 
             return response
 
-        return render_template('info.html', username=username, cookies=cookies)
+        return render_template('info.html', email=current_user.email, cookies=cookies, form=form)
     else:
+        flash("You are not logged in. Please log in to access this page.", "error")
         return redirect(url_for('login'))
 
 @app.route('/add_cookie', methods=['POST'])
@@ -165,33 +188,154 @@ def delete_all_cookies():
         return redirect(url_for('login'))
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    if 'username' in user_session:
-        del user_session['username']
-
-    return redirect(url_for('login'))
+    if request.method == 'POST' or request.method == 'GET':
+        logout_user()
+        flash("You've been logged out", category="success")
+        return redirect(url_for("login"))
+    return redirect(url_for("login"))
 
 @app.route('/change_password', methods=['POST'])
+@login_required
 def change_password():
-    old_password = request.form.get('old_password')
-    new_password = request.form.get('new_password')
+    form = ChangePasswordForm()
 
-    username = user_session['username']
+    if form.validate_on_submit():
+        user = current_user
 
-    with open(data_json_path, 'r') as json_file:
-        auth_data = json.load(json_file)
-
-    if username == auth_data['username'] and old_password == auth_data['password']:
-        auth_data['password'] = new_password
-
-        with open(data_json_path, 'w') as json_file:
-            json.dump(auth_data, json_file)
-
-        flash('Password changed successfully.', 'success')
-
-        return redirect(url_for('info'))
+        if user and user.checkPassword(form.old_password.data):
+            try:
+                # Update the password
+                user.set_password(form.new_password.data)
+                db.session.commit()
+                flash("Password changed", category="success")
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error: {e}", category="danger")
+        else:
+            flash("Invalid password", category="danger")
     else:
-        flash('Invalid password.', 'error')
+        flash("Form validation failed", category="danger")
 
-        return redirect(url_for('info'))
+    return redirect(url_for('account'))
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        comment = form.comment.data
+
+        feedback = Feedback(name=name, comment=comment)
+
+        try:
+            db.session.add(feedback)
+            db.session.commit()
+            flash('Feedback submitted successfully', 'success')
+        except:
+            flash('An error occurred while submitting feedback', 'error')
+
+        return redirect(url_for('feedback'))
+
+    feedback_data = Feedback.query.all()
+    return render_template('feedback.html', form=form, feedback_data=feedback_data)
+
+@app.route('/todo', methods=['GET', 'POST'])
+def todo():
+    form = TodoForm()
+
+    if form.validate_on_submit():
+        task = form.task.data
+        new_todo = Todo(task=task)
+        db.session.add(new_todo)
+        db.session.commit()
+        flash('Task added successfully!', 'success')
+        return redirect(url_for('todo'))
+
+    todos = Todo.query.all()
+    return render_template('todo.html', form=form, todos=todos)
+
+@app.route('/todo/update/<int:id>')
+def update_todo(id):
+    todo = Todo.query.get_or_404(id)
+    todo.status = not todo.status  # Toggle status
+    db.session.commit()
+    flash('Task updated successfully!', 'success')
+    return redirect(url_for('todo'))
+
+@app.route('/todo/delete/<int:id>')
+def delete_todo(id):
+    todo = Todo.query.get_or_404(id)
+    db.session.delete(todo)
+    db.session.commit()
+    flash('Task deleted successfully!', 'success')
+    return redirect(url_for('todo'))
+
+@app.route('/users')
+def users():
+    return render_template('users.html', users=User.query.all())
+
+
+# pic path #
+UPLOAD_FOLDER = 'static/imgs/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+# end #
+
+@app.before_request
+def update_last_seen():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+
+@app.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    update_account_form = UpdateAccountForm(obj=current_user)
+    change_password_form = ChangePasswordForm()
+
+    if update_account_form.validate_on_submit():
+        current_user.username = update_account_form.username.data
+        current_user.email = update_account_form.email.data
+        current_user.about_me = update_account_form.about_me.data
+
+        if 'image' in request.files:
+            file = request.files['image']
+            if file.filename != '':
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+                current_user.image_file = filename
+
+                # Move the file to the UPLOAD_FOLDER
+                destination = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename)
+                shutil.move(file_path, destination)
+
+        db.session.commit()
+        flash('Account updated successfully!', 'success')
+        return redirect(url_for('account'))
+
+    if change_password_form.validate_on_submit():
+        if current_user.check_password(change_password_form.old_password.data):
+            try:
+                current_user.set_password(change_password_form.new_password.data)
+                db.session.commit()
+                flash('Password changed successfully!', 'success')
+                return redirect(url_for('account'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error changing password: {e}", 'danger')
+        else:
+            flash('Current password is incorrect', 'danger')
+
+
+    return render_template('account.html', update_account_form=update_account_form, change_password_form=change_password_form, is_authenticated=True)
+
+
+
+
+
+
