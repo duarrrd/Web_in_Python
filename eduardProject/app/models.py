@@ -25,10 +25,11 @@ class User(db.Model, UserMixin):
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, about_me=None):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
+        self.about_me = about_me
 
     def __repr__(self):
         return f"{self.id} -- {self.username} -- {self.email}"
