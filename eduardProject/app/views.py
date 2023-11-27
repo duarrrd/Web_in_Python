@@ -18,7 +18,7 @@ data_json_path = os.path.join(script_dir, 'data.json')
 
 @app.route('/')
 def main():
-    OS = os.environ['OS']
+    OS = os.environ.get('OS', 'Unknown')
     u_agent = request.user_agent
     time = datetime.now().strftime("%H:%M")
     return render_template('main.html', u_agent=u_agent, time=time, OS=OS)
