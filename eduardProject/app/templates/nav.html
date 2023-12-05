@@ -1,11 +1,11 @@
 {% set menu = {
-  "Main": url_for('main'),
-  "Licenses & certifications": url_for('l_and_s'),
-  "Skills": url_for('skills'),
-  "Feedback": url_for('feedback'),
-  "ToDo": url_for('todo'),
-  "Users": url_for('users'),
-  "Info": url_for('info')
+  "Main": url_for('resume.main'),
+  "Licenses & certifications": url_for('resume.licenses_and_certifications'),
+  "Skills": url_for('resume.skills'),
+  "Feedback": url_for('feedback.feedback'),
+  "ToDo": url_for('todo.todo'),
+  "Users": url_for('profile.users'),
+  "Info": url_for('cookies.info')
 } %}
 
 <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -25,19 +25,19 @@
       {% if current_user.is_authenticated %}
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('account')}}">Account</a>
+            <a class="nav-link" href="{{url_for('profile.account')}}">Account</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+            <a class="nav-link" href="{{url_for('profile.logout')}}">Logout</a>
           </li>
         </ul>
       {% else %}
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('registration')}}">Registration</a>
+            <a class="nav-link" href="{{url_for('profile.registration')}}">Registration</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+            <a class="nav-link" href="{{url_for('profile.login')}}">Login</a>
           </li>
         </ul>
       {% endif %}

@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, ValidationError, Regexp, InputRequired
-from app.models import User
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms.validators import DataRequired, Length, Email, Regexp, ValidationError
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
+from .models import User
 
 class LoginForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired("Це поле обов'язкове"), Email()])
@@ -40,15 +40,6 @@ class ChangePasswordForm(FlaskForm):
     new_password = PasswordField(label='New password', validators=[DataRequired("Це поле обов'язкове"),
             Length(min=4, max=10, message="Повинно бути від 4 до 10 символів")])
     submit = SubmitField(label="Зберегти")
-
-class FeedbackForm(FlaskForm):
-    name = StringField('Ім’я', validators=[DataRequired()])
-    comment = TextAreaField('Коментар', validators=[DataRequired()])
-    submit = SubmitField('Надіслати відгук')
-
-class TodoForm(FlaskForm):
-    task = StringField('Завдання', validators=[DataRequired()])
-    submit = SubmitField('Додати')
 
 class UpdateAccountForm(FlaskForm):
     username = StringField("Username", validators=[Length(min=4, max=10),

@@ -4,7 +4,7 @@
     <h1>List of Skills</h1>
     <ul>
         {% for skill in my_skills %}
-            <a href="{{ url_for('skills', id=loop.index) }}"><li>{{ skill }}</li></a>
+            <a href="{{ url_for('resume.skills', id=loop.index) }}"><li>{{ skill }}</li></a>
         {% endfor %}
     </ul>
     <p>Total Skills: {{ my_skills|length }}</p>

@@ -36,7 +36,7 @@
                     </form>
                     <br><br><hr>
                     <h2>Change Password</h2>
-                    <form method="POST" action="{{ url_for('change_password') }}">
+                    <form method="POST" action="{{ url_for('profile.change_password') }}">
                         {{ change_password_form.csrf_token }}
                         <div class="form-group">
                             {{ render_field(change_password_form.old_password, 'Current Password', class="form-control") }}

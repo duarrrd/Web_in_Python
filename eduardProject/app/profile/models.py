@@ -3,16 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
 
-class Feedback(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    comment = db.Column(db.Text, nullable=False)
-
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.Boolean, default=False)
-
 @login_manager.user_loader
 def user_loader(user_id):
     return User.query.get(int(user_id))
