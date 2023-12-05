@@ -1,13 +1,6 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
 from config import config
-
-# Extensions
-db = SQLAlchemy()
-migrate = Migrate()
-login_manager = LoginManager()
+from .extensions import db, migrate, login_manager
 
 def create_app(config_name='DEF'):
     app = Flask(__name__)
