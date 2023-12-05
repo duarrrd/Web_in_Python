@@ -88,7 +88,7 @@ def users():
     return render_template('profile/users.html', users=User.query.all())
 
 # pic path #
-UPLOAD_FOLDER = 'app/static/imgs/'
+UPLOAD_FOLDER = 'static/imgs/'
 current_app.config['upload_folder'] = UPLOAD_FOLDER
 
 if not os.path.exists(UPLOAD_FOLDER):
