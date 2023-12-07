@@ -1,14 +1,18 @@
-# Account page
-![Веб-запис_12-11-2023_221757_127 0 0 1](https://github.com/duarrrd/Web_in_Python/assets/94750857/150e600f-3aa3-4c01-8b2c-c6fb4c79f752)
+# GET ping - pong
+![1](https://github.com/duarrrd/Web_in_Python/assets/94750857/63c37857-6a65-427b-9f24-7424a77f2970)
 
-# DB befor
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/8923a11d-181b-4c76-9f97-266794369e44)
+# GET /todos - get list of todos
+![2](https://github.com/duarrrd/Web_in_Python/assets/94750857/d5586559-7481-4a29-b697-0c9ad4ea95c3)
 
-# After changes
-![Веб-запис_12-11-2023_221929_127 0 0 1](https://github.com/duarrrd/Web_in_Python/assets/94750857/812a0401-489b-4e21-8fa4-102ddad88f89)
+# POST /todos  - create an  todo
+![3](https://github.com/duarrrd/Web_in_Python/assets/94750857/9f41e15e-74bf-4c5f-b727-aba83600adb3)
 
-# DB after
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/d728fb1d-4357-4c60-94f7-30dba86290fd)
+# GET /todos/<id> - get todo information
+![4](https://github.com/duarrrd/Web_in_Python/assets/94750857/4ab4bcd6-b2ee-44e8-8fea-46fadba51d3e)
 
-# Pass change
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/400ba5b3-e145-4cbe-a39a-4181fa5a9566)
+# PUT /todos/<id> - update todo
+![5](https://github.com/duarrrd/Web_in_Python/assets/94750857/6a732908-91d1-49b8-919e-83743f29fccf)
+![5 2](https://github.com/duarrrd/Web_in_Python/assets/94750857/8da81bb7-06b6-4cc0-83b1-3cc0ef3ccf18)
+
+# DELETE /todo/<id> - delete todo
+![6](https://github.com/duarrrd/Web_in_Python/assets/94750857/db98d876-b708-4125-a536-71c85cd85076)
