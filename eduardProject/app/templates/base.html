@@ -11,20 +11,21 @@
 </head>
 <body>
     {% include 'nav.html' %}
+    <div class="margins">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="alert alert-success">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="alert alert-success">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-
-    {% block content %}
-        <!-- Content from other pages -->
-    {% endblock %}
+        {% block content %}
+            <!-- Content from other pages -->
+        {% endblock %}
+    </div>
 
 </body>
 </html>

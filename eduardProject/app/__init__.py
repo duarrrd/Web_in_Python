@@ -23,6 +23,7 @@ def create_app(config_name='DEF'):
         from app.todo.views import todo_bp
         from app.feedback.views import feedback_bp
         from app.api.views import api_bp
+        from app.posts.views import posts_bp
 
         app.register_blueprint(resume_bp, url_prefix='/')
         app.register_blueprint(cookies_bp, url_prefix='/cookies')
@@ -30,5 +31,6 @@ def create_app(config_name='DEF'):
         app.register_blueprint(todo_bp, url_prefix='/todo')
         app.register_blueprint(feedback_bp, url_prefix='/feedback')
         app.register_blueprint(api_bp, url_prefix='/api')
+        app.register_blueprint(posts_bp, url_prefix='/posts')
 
     return app
