@@ -1,14 +1,20 @@
-# Account page
-![Веб-запис_12-11-2023_221757_127 0 0 1](https://github.com/duarrrd/Web_in_Python/assets/94750857/150e600f-3aa3-4c01-8b2c-c6fb4c79f752)
+# Posts-page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/82b26bc2-86e0-4e14-a445-24fc6d955233)
 
-# DB befor
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/8923a11d-181b-4c76-9f97-266794369e44)
+# post page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/c60b7526-d13c-400a-a443-aaf20244864e)
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/a99686bd-988a-4ae1-a9b4-95f297646c1a)
 
-# After changes
-![Веб-запис_12-11-2023_221929_127 0 0 1](https://github.com/duarrrd/Web_in_Python/assets/94750857/812a0401-489b-4e21-8fa4-102ddad88f89)
+# Create post page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/ebd0cf6d-e2fa-4baa-a3cf-95adea53c4e5)
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/2f6d2231-a7ad-4f57-bcaa-5d4928169994)
 
-# DB after
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/d728fb1d-4357-4c60-94f7-30dba86290fd)
+#Change post content page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/3040b535-4b9e-4d5f-9777-7c3dd4956b25)
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/fd399b0f-705c-4f05-b93c-879174ef7a47)
 
-# Pass change
-![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/400ba5b3-e145-4cbe-a39a-4181fa5a9566)
+# categories page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/a14bc503-44b0-42cb-a2d2-a9ab42dff87f)
+
+# tags page
+![image](https://github.com/duarrrd/Web_in_Python/assets/94750857/8d71b324-bcd8-4434-a083-0bccd908cf15)
