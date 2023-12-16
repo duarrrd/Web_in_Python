@@ -89,3 +89,42 @@ button{
 .read-post-btn {
   margin-top: 10px;
 }
+
+
+
+.custom-post-container {
+  width: 70%;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+}
+
+.custom-post-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.custom-post-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.custom-post-type,
+.custom-post-author {
+  font-size: 14px;
+}
+
+.custom-post-content {
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.custom-post-created {
+  font-size: 14px;
+  margin-top: 10px;
+}

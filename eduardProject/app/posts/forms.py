@@ -8,7 +8,9 @@ class PostForm(FlaskForm):
     text = TextAreaField(label='Text', validators=[DataRequired("Text is required")], id="text")
     image = FileField(label='Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])], id="image")
     type = SelectField(label='Post type (select one)', choices=[
-        ('Other', "Other"), ('Pets', 'Pets'), ('Gym', 'Gym'),
+        ('Other', "Other"),
+        ('Pets', 'Pets'),
+        ('Gym', 'Gym'),
         ('Food', 'Food')
     ])
     enabled = BooleanField(label='Show post', id="enabled")

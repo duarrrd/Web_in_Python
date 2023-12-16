@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% from "render_field.html" import render_field %}
+{% block title %}Post Page{% endblock %}
+{% block content %}
+    {% if post.enabled or post.user.id == current_user.id %}
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+      <div class="custom-post-container mt-4">
+        {% if post.user.id == current_user.id %}
+          <div class="mb-3">
+            <a href="{{url_for('posts.update_post', id=post.id)}}" class="btn btn-primary">Update Post</a>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Post</button>
+          </div>
+        {% endif %}
+
+        <div class="mb-3">
+          <img src="{{url_for('posts.static', filename='/' + post.image)}}" class="custom-post-image" alt="Post Image">
+        </div>
+
+        <div class="mb-3">
+          <h2 class="custom-post-title">{{ post.title }}</h2>
+          <p class="custom-post-type">Post Type: {{ post.type.name }}</p>
+          <p class="custom-post-author">Author: {{ post.user.username }}</p>
+            <p class="custom-post-created">Created: {{ post.created.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+          <p class="custom-post-content">{{ post.text }}</p>
+        </div>
+
+      </div>
+    {% endif %}
+{% endblock %}
