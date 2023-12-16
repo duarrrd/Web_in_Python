@@ -29,6 +29,14 @@
           {{ render_field(form.type, class="form-control", style="background-color: black; color: white;", value=post.type) }}
         </div>
 
+          <div class="mb-3">
+              {{ render_field(form.categories, class="form-select") }}
+        </div>
+
+          <div class="mb-3">
+              {{ render_field(form.tags, class="form-select") }}
+        </div>
+
         <div class="mb-3 form-check">
           {{ render_field(form.enabled, class="form-check-input") }}
         </div>

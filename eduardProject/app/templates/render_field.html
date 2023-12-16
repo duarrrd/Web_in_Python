@@ -7,6 +7,9 @@
     {% elif field.type == "BooleanField" %}
         {{ field(class='form-check-input mt-2', **kwargs) }}
         {{ field.label(class='form-check-label mt-2') }}
+    {% elif field.type == "SelectMultipleField"  %}
+        {{ field.label(class="form-label") }}
+        {{ field(placeholder="", **kwargs)| safe }}
     {% else %}
         {{ field(**kwargs)| safe }}
     {% endif %}

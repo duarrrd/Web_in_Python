@@ -128,3 +128,9 @@ button{
   font-size: 14px;
   margin-top: 10px;
 }
+
+
+.btn-custom {
+        padding: 10px 25px;
+        margin-right: 10px; /* Optional: Adjust margin as needed */
+    }
