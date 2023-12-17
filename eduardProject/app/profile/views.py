@@ -87,17 +87,18 @@ def change_password():
 def users():
     return render_template('profile/users.html', users=User.query.all())
 
-# pic path #
-UPLOAD_FOLDER = 'static/imgs/'
-current_app.config['upload_folder'] = UPLOAD_FOLDER
-
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-# end #
-
 @profile_bp.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
+    UPLOAD_FOLDER = 'static/imgs/'
+
+    # Use app context to set configuration value
+    with current_app.app_context():
+        current_app.config['upload_folder'] = UPLOAD_FOLDER
+
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+
     update_account_form = UpdateAccountForm(obj=current_user)
     change_password_form = ChangePasswordForm()
 
@@ -137,7 +138,6 @@ def account():
             flash('Current password is incorrect', 'danger')
 
     return render_template('profile/account.html', update_account_form=update_account_form, change_password_form=change_password_form, is_authenticated=True, os=os)
-
 @profile_bp.before_request
 def update_last_seen():
     if current_user.is_authenticated:

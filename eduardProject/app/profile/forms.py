@@ -8,7 +8,7 @@ from .models import User
 class LoginForm(FlaskForm):
     email = StringField(label='Email', validators=[DataRequired("Це поле обов'язкове"), Email()])
     password = PasswordField(label='Password', validators=[DataRequired("Це поле обов'язкове")])
-    remember = BooleanField(label="Запам'ятати мене")
+    remember = BooleanField(label="Запам`ятати мене")
     submit = SubmitField(label="Ввійти")
 
 class RegistrationForm(FlaskForm):
