@@ -112,7 +112,7 @@ def update_post(id):
     return render_template("posts/update_post.html", form=form, post=post)
 
 
-@posts_bp.route("/delete/<int:id>", methods=["POST"])
+@posts_bp.route("/delete/<int:id>", methods=['GET', 'POST'])
 def delete_post(id):
     post = Post.query.get_or_404(id)
 

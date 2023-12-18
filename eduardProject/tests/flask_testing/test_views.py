@@ -1,10 +1,10 @@
-# tests/test_views.py
+# tests/flask_testing/test_views.py
 from flask import url_for
-from tests import BaseTestCase
+from .base_test import BaseTest
 from app.profile.models import User
-from flask_login import current_user
 
-class ViewsTest(BaseTestCase):
+
+class ViewsTest(BaseTest):
 
     # >>>>>>>>>>>>>
     # Resume test starts
@@ -73,10 +73,3 @@ class ViewsTest(BaseTestCase):
         response = self.client.get(url_for('profile.users'), follow_redirects=True)
         self.assert200(response)
         self.assertIn(b'Number of users', response.data)
-
-    # TEST-END
-    # >>>>>>>>>>>>>
-    # todo test starts
-    # >>>>>>>>>>>>>
-
-

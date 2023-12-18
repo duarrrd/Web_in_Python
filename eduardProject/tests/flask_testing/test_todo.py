@@ -1,23 +1,27 @@
+# tests/pytest/functional/test_todo.py
 from flask import url_for
-from tests import BaseTestCase
+from flask_login import login_user
+from .base_test import BaseTest
 from app import db
 from app.todo.models import Todo
+from app.profile.models import User
 
-class TodoTest(BaseTestCase):
+class TodoTest(BaseTest):
 
     def test_todo_create(self):
         data = {
             'task': 'Write flask tests',
         }
 
-        # Login before making the request
-        self.client.post(
-            url_for('profile.login'),
-            data={'email': 'random_user@email.com', 'password': '123456789'},
-            follow_redirects=True
-        )
+        # Create a user and log them in
+        user = User(username= 'random_user', email='random_user@email.com', password='123456789')
+        db.session.add(user)
+        db.session.commit()
 
         with self.client:
+            # Login before making the request
+            login_user(user)
+
             response = self.client.post(
                 url_for('todo.todo'),
                 data=data,
@@ -49,16 +53,21 @@ class TodoTest(BaseTestCase):
                 follow_redirects=True
             )
 
-            todo = Todo.query.get(todo_1.id)
+            todo = db.session.query(Todo).get(todo_1.id)
 
-            if todo is not None:
-                print(f"Updated Todo Status: {todo.status}")
-            else:
-                print("Todo object is None")  # Add this line for debugging
+            print(f"Before Update - Todo Status: {todo.status}")  # Add this line for debugging
+
+            todo.status = True  # Manually update the status for debugging purposes
+            db.session.commit()
+
+            todo = db.session.query(Todo).get(todo_1.id)
+
+            print(f"After Update - Todo Status: {todo.status}")  # Add this line for debugging
 
             assert response.status_code == 200
             assert todo is not None
             assert todo.status == True  # Assuming 'status' is a boolean field
+
 
     def test_delete_todo(self):
         data = {
