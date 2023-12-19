@@ -1,6 +1,6 @@
 from flask import Flask
 from config import config
-from .extensions import db, migrate, login_manager
+from .extensions import db, migrate, login_manager, jwt_manager
 
 def create_app(config_name='DEF'):
     app = Flask(__name__)
@@ -10,6 +10,7 @@ def create_app(config_name='DEF'):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    jwt_manager.init_app(app)
 
     # Configure login_manager
     login_manager.login_view = 'profile.login'
