@@ -1,6 +1,8 @@
 from flask import Flask
 from config import config
 from .extensions import db, migrate, login_manager, jwt_manager, ma
+import sqlalchemy as sa
+from sqlalchemy.engine.reflection import Inspector
 
 def create_app(config_name='DEF'):
     app = Flask(__name__)
@@ -12,6 +14,17 @@ def create_app(config_name='DEF'):
     login_manager.init_app(app)
     jwt_manager.init_app(app)
     ma.init_app(app)
+
+    with app.app_context():
+        # Check if the database needs initialization
+        engine = sa.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+        inspector = Inspector.from_engine(engine)
+
+        if not inspector.has_table("user"):
+            db.create_all()
+            app.logger.info('Initialized the database!')
+        else:
+            app.logger.info('Database already contains the user table.')
 
     # Configure login_manager
     login_manager.login_view = 'profile.login'
