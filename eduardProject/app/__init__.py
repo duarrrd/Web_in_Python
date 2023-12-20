@@ -40,3 +40,6 @@ def create_app(config_name='DEF'):
         app.register_blueprint(swagger_bp, url_prefix='/swagger')
 
     return app
+
+
+app = create_app()
