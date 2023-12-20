@@ -1,6 +1,6 @@
 from flask import Flask
 from config import config
-from .extensions import db, migrate, login_manager, jwt_manager
+from .extensions import db, migrate, login_manager, jwt_manager, ma
 
 def create_app(config_name='DEF'):
     app = Flask(__name__)
@@ -11,6 +11,7 @@ def create_app(config_name='DEF'):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     jwt_manager.init_app(app)
+    ma.init_app(app)
 
     # Configure login_manager
     login_manager.login_view = 'profile.login'
@@ -25,6 +26,8 @@ def create_app(config_name='DEF'):
         from app.feedback.views import feedback_bp
         from app.api.views import api_bp
         from app.posts.views import posts_bp
+        from app.user_api.views import user_api_bp
+        from app.swagger import swagger_bp
 
         app.register_blueprint(resume_bp, url_prefix='/')
         app.register_blueprint(cookies_bp, url_prefix='/cookies')
@@ -33,5 +36,7 @@ def create_app(config_name='DEF'):
         app.register_blueprint(feedback_bp, url_prefix='/feedback')
         app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(posts_bp, url_prefix='/posts')
+        app.register_blueprint(user_api_bp, url_prefix='/user_api/')
+        app.register_blueprint(swagger_bp, url_prefix='/swagger')
 
     return app
