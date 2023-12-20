@@ -152,16 +152,16 @@
                         "type": "string",
                         "format": "email"
                     },
-                    "image": {
+                    "image_file": {
                         "type": "string"
                     },
                     "password": {
                         "type": "string"
                     },
-                    "aboutMe": {
+                    "about_me": {
                         "type": "string"
                     },
-                    "lastSeen": {
+                    "last_seen": {
                         "type": "string",
                         "format": "date-time"
                     }
