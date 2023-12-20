@@ -21,8 +21,10 @@ def create_app(config_name='DEF'):
         inspector = Inspector.from_engine(engine)
 
         if not inspector.has_table("user"):
+            # Create tables and perform migrations
             db.create_all()
-            app.logger.info('Initialized the database!')
+            migrate.upgrade()
+            app.logger.info('Initialized the database and performed migrations!')
         else:
             app.logger.info('Database already contains the user table.')
 
